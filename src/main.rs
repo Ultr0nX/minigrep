@@ -2,22 +2,22 @@ use std::env;
 use std::fs;
 use std::process;
 use std::error::Error;
-use minigrep::search;
+use minigrep::{search, search_case_insensitive};
 
 fn main() {
 
     let args : Vec<String> = env::args().collect();
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {err}");
+        eprintln!("Problem parsing arguments: {err}");
         process::exit(1);
     });
 
-    println!("Searching for {}" , config.query);
-    println!("In file {}",config.file_path);
+    // println!("Searching for {}" , config.query);
+    // println!("In file {}",config.file_path);
 
     // “If the result matches Err(e), run this block.”
     if let Err(e) = run(config) {
-        println!("Application error: {e}");
+        eprintln!("Application error: {e}");
         process::exit(1);
     }
 
@@ -25,15 +25,16 @@ fn main() {
 
 
 
-fn run(config:Config) -> Result < () , Box<dyn Error>> {
-
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
-    //? -> rather than panic on an error , it will return the error value from the current function for the caller to handle.
-    
-    for line in search(&config.query , &contents){
+    let results = if config.ignore_case {
+        search_case_insensitive(&config.query, &contents)
+    } else {
+        search(&config.query, &contents)
+    };
+    for line in results {
         println!("{line}");
     }
-
     Ok(())
 }
 
@@ -42,6 +43,7 @@ fn run(config:Config) -> Result < () , Box<dyn Error>> {
 struct Config {
     query : String,
     file_path : String,
+    pub ignore_case: bool,
 }
 
 impl Config {
@@ -54,6 +56,8 @@ impl Config {
         let query = args[1].clone();
         let file_path= args[2].clone();
 
-        Ok(Config { query , file_path })
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
+
+        Ok(Config { query , file_path, ignore_case, })
     }
 }
