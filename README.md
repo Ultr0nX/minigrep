@@ -4,11 +4,11 @@
 
 
 # Table of contents
-- [What Is It and What It does ?](#what-is-it-and-what-it-does)
+- [What Is It and What It does ?](#what-is-it)
 - [Set up / How to run](#quick-action)
 - [code Walkthrough](#code-walkthrough)
 
-# What Is It and what It does ?
+# What is It
 
 It Is an CLI tool built using **RUST** Programming language while following the Rust book.
 
