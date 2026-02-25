@@ -4,8 +4,8 @@
 
 
 # Table of contents
-- [What Is It and What It does ?](#what-it-does-)
-- [Set up / How to run](#quick-action--or-how-to-run-)
+- [What Is It and What It does ?](#what-is-it-and-what-it-does)
+- [Set up / How to run](#quick-action)
 - [code Walkthrough](#code-walkthrough)
 
 # What Is It and what It does ?
